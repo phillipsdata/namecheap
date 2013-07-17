@@ -38,13 +38,14 @@ class NamecheapDomains {
 	}
 
 	/**
-	 * Returns information about a domains.
+	 * Returns information about the requested domain. 
 	 *
-	 * @param string $domain The domain to query.
+	 * @param array $vars An array of input params including:
+	 * 	- DomainName The domain name to lookup
 	 * @return NamecheapResponse
 	 */
-	public function getInfo($domain) {
-		return $this->api->submit("namecheap.domains.getInfo", array('DomainName'=>$domain));
+	public function getInfo(array $vars) {
+		return $this->api->submit("namecheap.domains.getInfo", $vars);
 	}
 
 	/**
