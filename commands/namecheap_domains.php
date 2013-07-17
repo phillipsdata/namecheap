@@ -38,6 +38,16 @@ class NamecheapDomains {
 	}
 
 	/**
+	 * Returns information about a domains.
+	 *
+	 * @param string $domain The domain to query.
+	 * @return NamecheapResponse
+	 */
+	public function getInfo($domain) {
+		return $this->api->submit("namecheap.domains.getInfo", array('DomainName'=>$domain));
+	}
+
+	/**
 	 * Returns a list of tlds
 	 * 
 	 * @return NamecheapResponse
