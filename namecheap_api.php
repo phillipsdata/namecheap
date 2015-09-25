@@ -100,6 +100,7 @@ class NamecheapApi {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($args));
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 		$response = curl_exec($ch);
 
