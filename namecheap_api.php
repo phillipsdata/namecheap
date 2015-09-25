@@ -42,7 +42,12 @@ class NamecheapApi {
 	 * @var array An array representing the last request made
 	 */
 	private $last_request = array('url' => null, 'args' => null);
-	
+
+	/**
+	 * @var array An array representing the last response back from
+	 */
+	private $last_response = array( 'url' => null, 'http_status' => null, 'response' => null, 'error' => null);
+
 	/**
 	 * Sets the connection details
 	 *
@@ -95,22 +100,47 @@ class NamecheapApi {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($args));
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		//curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 		$response = curl_exec($ch);
+
+		$info = curl_getinfo($ch);
+
+		$last_response = array(
+			'error' => curl_error($ch),
+			'url' => $url,
+			'http_status' => $info['http_code'],
+			'response' => $response
+		);
+
 		curl_close($ch);
-		
+		$this->last_response = $last_response;
+
 		return new NamecheapResponse($response);
 	}
 	
 	/**
 	 * Returns the details of the last request made
 	 *
-	 * @return array An array containg:
+	 * @return array An array containing:
 	 * 	- url The URL of the last request
 	 * 	- args The paramters passed to the URL
 	 */
 	public function lastRequest() {
 		return $this->last_request;
+	}
+
+	/**
+	 * Returns the details of the last response.
+	 *
+	 * @return array An array containing:
+	 *   - url - the URL requested
+	 *   - error - any curl related error.
+	 *   - http_status - http status code (e.g. 200)
+	 *   - response - the raw textual response 
+	 */
+	public function lastResponse() {
+		return $this->last_response;
 	}
 }
 ?>
